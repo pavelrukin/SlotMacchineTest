@@ -72,6 +72,7 @@ obj/
 
 # User-specific configurations
 .idea/caches/
+.idea/deploymentTargetDropDown.xml
 .idea/libraries/
 .idea/shelf/
 .idea/workspace.xml

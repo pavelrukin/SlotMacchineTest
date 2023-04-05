@@ -19,6 +19,7 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 listOf(
+
                     dataModules,
                     presentationModule
                 )

@@ -15,8 +15,7 @@ import com.samsungmalex.slotmachinetest.databinding.FragmentMainMenuBinding
 class MainMenuFragment : Fragment() {
 
 private var _binding: FragmentMainMenuBinding? = null
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -36,10 +35,7 @@ private var _binding: FragmentMainMenuBinding? = null
             MainMenuFragmentDirections.actionFragmentMainMenuToGameFragment()
         binding.playButton.setOnClickListener { findNavController().navigate(action) }
         binding.exitButton.setOnClickListener { activity?.finish() }
-/*
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        }*/
+
     }
 override fun onDestroyView() {
         super.onDestroyView()

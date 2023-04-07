@@ -41,11 +41,6 @@ class GameRepositoryImpl(private val dataStoreManger: DataStoreManger) : GameRep
                 updateCredits(credits + payout)
             }
         }
-        Log.e(
-            javaClass.simpleName,
-            "spin:Repository payout  $payout" +
-                    "result  ${result[0]} ${result[1]} ${result[2]}",
-        )
         return SpinResult(result, payout)
 
     }

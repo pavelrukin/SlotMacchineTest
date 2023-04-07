@@ -2,6 +2,7 @@ package com.samsungmalex.slotmachinetest.presentation.screens.game
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.samsungmalex.slotmachinetest.domain.model.Items
 import com.samsungmalex.slotmachinetest.domain.model.SpinResult
 import com.samsungmalex.slotmachinetest.domain.repository.GameRepository
 import kotlinx.coroutines.delay
@@ -37,6 +38,14 @@ class GameViewModel(private val gameRepository: GameRepository) : ViewModel() {
 
     private val _win = MutableLiveData(0)
     val win: LiveData<Int> = _win
+
+    private var _imageItem1 = MutableLiveData<Int>(0)
+    val imageItem1: LiveData<Int> = _imageItem1
+    private var _imageItem2 = MutableLiveData(0)
+    val imageItem2: LiveData<Int> = _imageItem2
+    private var _imageItem3 = MutableLiveData(0)
+    val imageItem3: LiveData<Int> = _imageItem3
+
 
     init {
         getValueCredit()
@@ -94,7 +103,7 @@ class GameViewModel(private val gameRepository: GameRepository) : ViewModel() {
             _imageSpin.value = ButtonState.SELECTED
             delay(500)
             disableButtons()
-            delay(4000)
+            delay(500)
             _imageSpin.value = ButtonState.DEFAULT
             defaultButtons()
             spin()
@@ -124,18 +133,16 @@ class GameViewModel(private val gameRepository: GameRepository) : ViewModel() {
         _imageSpin.value = ButtonState.DEFAULT
     }
     fun spin() {
-        Log.d(javaClass.simpleName, "spin: start")
+
         viewModelScope.launch() {
             gameRepository.updateCredits(credits.value!! - bet.value!!)
             val result = gameRepository.spin(bet.value!!)
-            Log.d(javaClass.simpleName, "spinViewModel: ${result} ")
             _win.value = result.payout
+            _imageItem1.value = result.items[0].drawable
+            _imageItem2.value = result.items[1].drawable
+            _imageItem3.value = result.items[2].drawable
 
         }
-
-        Log.d(javaClass.simpleName, "spin: end~!@!@!@")
-        Log.d(javaClass.simpleName, "spin: ${bet.value}")
-
 
     }
 

@@ -1,11 +1,14 @@
 package com.samsungmalex.slotmachinetest.presentation.screens.game
 
+import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.samsungmalex.slotmachinetest.R
@@ -13,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.samsungmalex.slotmachinetest.databinding.FragmentGameBinding
 import com.samsungmalex.slotmachinetest.presentation.screens.game.ButtonState.*
 import kotlinx.coroutines.*
+import kotlin.random.Random
 
 class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
@@ -37,25 +41,13 @@ class GameFragment : Fragment() {
         imageSpinObserve()
 
 
-        viewModel.spinResult.observe(viewLifecycleOwner) { spinResult ->
-
-            spinResult.items[0]
-            spinResult.items[1]
-            spinResult.items[2]
-            Log.d(javaClass.simpleName, "onViewCreatedspinResult: $spinResult")
-            binding.ivItem1
-            binding.ivItem2
-            binding.ivItem3
-
-
-        }
 
         viewModel.bet.observe(viewLifecycleOwner) { bet ->
             binding.tvBet.text = "$${bet.toString()}"
         }
 
         viewModel.credits.observe(viewLifecycleOwner) { credits ->
-            binding.tvCredit.text ="$${credits.toString()}"
+            binding.tvCredit.text = "$${credits.toString()}"
 
         }
         viewModel.win.observe(viewLifecycleOwner) { win ->
@@ -74,14 +66,44 @@ class GameFragment : Fragment() {
         }
         binding.ivSpin.setOnClickListener {
             viewModel.imageSpinClick()
+            spinAnimation()
+
         }
     }
+
+    private fun spinAnimation() {
+
+        viewModel.imageItem1.observe(viewLifecycleOwner) {
+            binding.ivItem1.setImageResource(it)
+        }
+        viewModel.imageItem2.observe(viewLifecycleOwner) {
+            binding.ivItem2.setImageResource(it)
+        }
+        viewModel.imageItem3.observe(viewLifecycleOwner) {
+            binding.ivItem3.setImageResource(it)
+        }
+
+        binding.ivItem1.setImageResource(R.drawable.animation)
+        val slot1Anim: AnimationDrawable = binding.ivItem1.drawable as AnimationDrawable
+        slot1Anim.start()
+
+
+
+        binding.ivItem2.setImageResource(R.drawable.animation)
+        val slot2Anim: AnimationDrawable = binding.ivItem2.drawable as AnimationDrawable
+        slot2Anim.start()
+
+        binding.ivItem3.setImageResource(R.drawable.animation)
+        val slot3Anim: AnimationDrawable = binding.ivItem3.drawable as AnimationDrawable
+        slot3Anim.start()
+    }
+
 
     private fun imagePayTableObserve() {
         viewModel.imagePayTable.observe(viewLifecycleOwner) { state ->
 
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                Log.d(javaClass.simpleName, "onViewCreatedimagePayTable: $state")
+                11(javaClass.simpleName, "onViewCreatedimagePayTable: $state")
                 val defaultImg = R.drawable.btn_table_default
                 val selectedImg = R.drawable.btn_table_pressed
                 val disableImg = R.drawable.btn_table_disabled
@@ -117,7 +139,6 @@ class GameFragment : Fragment() {
     private fun imageBetOneObserve() {
         viewModel.imageBetOne.observe(viewLifecycleOwner) { state ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                Log.d(javaClass.simpleName, "onViewCreatedimageBetOne: $state")
                 val defaultImg = R.drawable.btn_one_default
                 val selectedImg = R.drawable.btn_one_pressed
                 val disableImg = R.drawable.btn_one_disabled
@@ -153,7 +174,6 @@ class GameFragment : Fragment() {
     private fun imageBetMaxObserve() {
         viewModel.imageBetMax.observe(viewLifecycleOwner) { state ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                Log.d(javaClass.simpleName, "onViewCreatedimageBetMax: $state")
                 val defaultImg = R.drawable.btn_max_default
                 val selectedImg = R.drawable.btn_max_pressed
                 val disableImg = R.drawable.btn_max_disabled
@@ -188,7 +208,6 @@ class GameFragment : Fragment() {
     private fun imageSpinObserve() {
         viewModel.imageSpin.observe(viewLifecycleOwner) { state ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                Log.d(javaClass.simpleName, "onViewCreatedimageSpin: $state")
                 val defaultImg = R.drawable.btn_spin_default
                 val selectedImg = R.drawable.btn_spin_pressed
                 val disableImg = R.drawable.btn_spin_disabled
@@ -224,5 +243,10 @@ class GameFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycleScope.coroutineContext.cancel()
     }
 }

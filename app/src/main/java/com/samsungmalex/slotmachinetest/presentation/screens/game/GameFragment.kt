@@ -103,7 +103,6 @@ class GameFragment : Fragment() {
         viewModel.imagePayTable.observe(viewLifecycleOwner) { state ->
 
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                11(javaClass.simpleName, "onViewCreatedimagePayTable: $state")
                 val defaultImg = R.drawable.btn_table_default
                 val selectedImg = R.drawable.btn_table_pressed
                 val disableImg = R.drawable.btn_table_disabled
